@@ -36,9 +36,116 @@ ggplot(data=mpg, aes(x=displ, y=hwy, color=class)) + geom_point()
 ggplot(data=mpg, aes(x=displ, y=hwy, shape=class)) + geom_point()
 ```
 
-Keep shapes but need to change the size of shapes
+Keep shapes but need to change the size of shapes and add in fuel type as a color and now looking at cty instead of displ
+
+`alpha` in `geom_point` adds transparency 
 
 ```{r}
-ggplot(data=mpg, aes(x=displ, y=hwy, shape=class)) + geom_point()
+ggplot(data=mpg, aes(x=cty, y=hwy, size=class, color=fl)) + 
+  geom_point(alpha=0.2, color= "blue")
+```
+
+
+
+```{r}
+    ggplot(data = mpg, aes(x = displ, y = hwy, olor=displ <5)) + 
+      geom_point()
+```
+
+###Geoms
+
+```{r}
+ggplot(mpg, aes(x=drv, y=hwy))+
+  geom_boxplot()
+```
+
+```{r}
+ggplot(mpg, aes(x=drv, y=hwy))+
+  geom_jitter()
+```
+```{r}
+ggplot(mpg, aes(x=drv, y=hwy))+
+  geom_violin()
+```
+
+
+combining two types of geoms into one
+```{r}
+ggplot(data=mpg, aes(x=displ, y=hwy)) + 
+  geom_point()+
+  geom_smooth()
+```
+Now lets customize this plot
+
+color funtimes
+
+```{r palettes}
+install.packages("colorspace")
+library(colorspace)
+```
+
+```{r customize}
+ggplot(data=mpg, aes(x=displ, y=hwy, color=cyl)) + 
+  geom_point(alpha=0.9, size=4)+
+  geom_smooth(fill="pink", color="red",size=1)+
+  labs(title="Relationship between engine size and mpg", y="Highway mpg", x="Enginge displacement (liters)")+
+  theme_classic()+
+  theme(text=element_text(size=15), panel.grid.major=element_blank())+
+  scale_color_continuous(name="# Cylinders")
+```
+##Data Wrangling with `dplyr`
+
+get gapminder dataset from OHI website
+
+```{r}
+gapminder <- read_csv("https://raw.githubusercontent.com/OHI-Science/data-science-training/master/data/gapminder.csv")
+```
+
+`read_csv` is from the `readr` package (part of tidyverse). It is not `read.csv`, which is part of base R. 
+
+###useful functions to get to know data
+
+```{r}
+head(gapminder) #first six rows of data
+tail(gapminder) # last six rows of data
+
+head(gapminder, 30) #show X n rows of data instead of the default six
+
+str(gapminder) #structure
+names(gapminder) #colnames
+dim(gapminder) #dimensions
+ncol(gapminder) #number of columns
+nrow(gapminder) #number of rows
+
+c(nrow(gapminder), ncol(gapminder)) #c() helps you combine two different functions
+summary(gapminder)
+```
+
+For everything above we were operating on the entire gapminder dataset. 
+
+```{r}
+head(gapminder$lifeExp)
+```
+
+###Actually working with diplyr 
+
+Using `filter`
+```{r}
+filter(gapminder, lifeExp <29) #from gapminder data, filters out those where life expectancy is less than 29
+
+filter(gapminder, country == "Mexico")
+
+filter(gapminder, country == "Sweden") %>% summarise((mean(lifeExp)))
+
+```
+
+####Pipe operator `%>%` or shortcut Cmd+Shift+M, pipe reads as THEN
+
+```{r}
+gapminder %>% head() #instead of head(gapminder)
+
+gapminder %>% head(3) #still lets you decide how many rows in head. 
+
+gapminder %>% filter(country =="Sweden") %>% summarise(mean(lifeExp))
 ```
 
