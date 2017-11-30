@@ -1,0 +1,36 @@
+---
+title: "Software Carpentry Workshop - MBARI"
+author: "Ana Sofia Guerra"
+output:
+  html_notebook: default
+---
+
+#Intro to R and R Studio
+
+##R shortcuts 
+
+Option "dash" = assignments
+
+ls() - shows list of all values in your environment
+
+rm() - removes values from environment
+
+rm(list = ls()) - clears whole environment
+
+##R Markdown Intro
+
+```{r cars}
+#comment
+summary(cars)
+```
+
+Now lets look at whole "cars" dataset
+
+```{r}
+cars
+```
+
+*italic*
+**bold**
+
+
