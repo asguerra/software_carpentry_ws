@@ -21,7 +21,24 @@ library(tidyverse)
 ```
 
 ```{r scatterplot}
-g <- ggplot(data=mpg, aes(x=displ, y=hwy))
-g + geom_point()
+ggplot(data=mpg, aes(x=displ, y=hwy)) + geom_point()
+```
+
+### I need `color`!
+
+```{r color scatter}
+ggplot(data=mpg, aes(x=displ, y=hwy, color=class)) + geom_point()
+```
+
+...but I need a black and white figure, so change `color` to `shape`
+
+```{r bw scatter}
+ggplot(data=mpg, aes(x=displ, y=hwy, shape=class)) + geom_point()
+```
+
+Keep shapes but need to change the size of shapes
+
+```{r}
+ggplot(data=mpg, aes(x=displ, y=hwy, shape=class)) + geom_point()
 ```
 
