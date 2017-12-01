@@ -142,10 +142,84 @@ filter(gapminder, country == "Sweden") %>% summarise((mean(lifeExp)))
 ####Pipe operator `%>%` or shortcut Cmd+Shift+M, pipe reads as THEN
 
 ```{r}
-gapminder %>% head() #instead of head(gapminder)
+gapminder %>% head() #instead of head(gapminder)ss
 
 gapminder %>% head(3) #still lets you decide how many rows in head. 
 
 gapminder %>% filter(country =="Sweden") %>% summarise(mean(lifeExp))
+```
+
+###Select() by columns
+```{r}
+select(gapminder, year, lifeExp)
+
+gapminder %>% select(year,lifeExp) %>% tail()
+```
+
+###combine all the things
+
+
+```{r}
+gapminder %>% filter(country=="Cambodia") %>% select(country, year, pop, gdpPercap)
+
+gapminder %>% filter(country=="Cambodia") %>%  select(-continent,-lifeExp) #exclude/deselect rather than select for specific columns
+
+gapminder %>% 
+  filter(country=="Mexico", 
+         year==2002)
+```
+
+###mutate to add columns
+
+```{r}
+gapminder %>% mutate(gdp = pop*gdpPercap)
+```
+#####let's add an index
+
+```{r}
+test <- gapminder %>% 
+  mutate(gpd = pop*gdpPercap) %>% 
+  mutate(index= 1:nrow(gapminder)) 
+```
+
+ilter for multiple values
+`%in%` lets you filter multiple things within a `c()`
+
+```{r}
+gapminder %>% 
+  filter(country %in% c("Egypt", "Vietnam")) 
+```
+
+Exercise: max gdpPerCapita of Egypt and Vietnam in new column 
+
+```{r}
+gapminder %>%
+  filter(country %in% c("Egypt", "Vietnam")) %>%
+  mutate(maxgpdpc = max(gdpPercap))
+```
+
+####group_by() so that we can get two max values
+
+```{r}
+gapminder %>% 
+  filter(country %in% c("Egypt", "Vietnam")) %>% 
+  group_by(country) %>% 
+  summarise(max_gdpPercap = max(gdpPercap))
+```
+If you don't specify which country, it gives max for all countries
+```{r}
+gapminder %>% 
+  group_by(country) %>% 
+  summarise(max_gdpPercap = max(gdpPercap))
+```
+
+##let's keep the year associated with that max_gdpPerCap
+
+```{r}
+gapminder %>% 
+  group_by(country) %>% 
+  mutate(max_gdpPercap = max(gdpPercap)) %>% 
+  filter(max_gdpPercap == gdpPercap) %>% 
+  arrange(max_gdpPercap) #arrange lets you order the data in descending order. 
 ```
 
